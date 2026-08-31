@@ -11,9 +11,23 @@ st.set_page_config(
 )
 
 # --- CONEXÃO COM SUPABASE ---
-# Configure no .streamlit/secrets.toml ou insira as chaves diretamente
-SUPABASE_URL = st.secrets.get("SUPABASE_URL", "SUA_URL_DO_SUPABASE")
-SUPABASE_KEY = st.secrets.get("SUPABASE_KEY", "SUA_KEY_ANON_DO_SUPABASE")
+SUPABASE_URL = st.secrets.get("SUPABASE_URL", "")
+SUPABASE_KEY = st.secrets.get("SUPABASE_KEY", "")
+
+if not SUPABASE_URL or not SUPABASE_KEY or "SUA_URL" in SUPABASE_URL:
+    st.error("⚠️ **Credenciais do Supabase não configuradas no Streamlit Cloud!**")
+    st.markdown("""
+    Para ativar o banco de dados:
+    1. No canto inferior direito do app, clique em **Manage app** (ou no menu superior `⋮` ➔ **Settings**).
+    2. Acesse a aba **Secrets**.
+    3. Cole as seguintes variáveis:
+    ```toml
+    SUPABASE_URL = "https://sqwgucoqgnmnasfiqqfa.supabase.co"
+    SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxd2d1Y29xZ25tbmFzZmlxcWZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxODQ3NTIsImV4cCI6MjEwMzc2MDc1Mn0.jsbz8BXagWcF7VBTzKBY0sG-ud5vedMsHq_EMcG84Cs"
+    ```
+    4. Clique em **Save**. O app recarregará automaticamente.
+    """)
+    st.stop()
 
 @st.cache_resource
 def init_supabase() -> Client:
